@@ -1,0 +1,850 @@
+{
+  "contractName": "SimpleToken",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_spender",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "approve",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "totalSupply",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_from",
+          "type": "address"
+        },
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transferFrom",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "decimals",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_who",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_to",
+          "type": "address"
+        },
+        {
+          "name": "_value",
+          "type": "uint256"
+        }
+      ],
+      "name": "transfer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "name": "_spender",
+          "type": "address"
+        }
+      ],
+      "name": "allowance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_name",
+          "type": "string"
+        },
+        {
+          "name": "_symbol",
+          "type": "string"
+        },
+        {
+          "name": "_decimals",
+          "type": "uint8"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "spender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approval",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "value",
+          "type": "uint256"
+        }
+      ],
+      "name": "Transfer",
+      "type": "event"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity ^0.4.7;\n\nimport '../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';\nimport '../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol';\n\ncontract SimpleToken is ERC20, DetailedERC20 {\n\n  constructor(string _name, string _symbol, uint8 _decimals)\n      DetailedERC20(_name, _symbol, _decimals)\n      ERC20()\n      public {}\n}\n",
+  "sourcePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/contracts/SimpleToken.sol",
+  "ast": {
+    "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/contracts/SimpleToken.sol",
+    "exportedSymbols": {
+      "SimpleToken": [
+        82
+      ]
+    },
+    "id": 83,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 58,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".7"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:1"
+      },
+      {
+        "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 59,
+        "nodeType": "ImportDirective",
+        "scope": 83,
+        "sourceUnit": 160,
+        "src": "25:79:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol",
+        "file": "../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol",
+        "id": 60,
+        "nodeType": "ImportDirective",
+        "scope": 83,
+        "sourceUnit": 117,
+        "src": "105:87:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 61,
+              "name": "ERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 159,
+              "src": "218:5:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC20_$159",
+                "typeString": "contract ERC20"
+              }
+            },
+            "id": 62,
+            "nodeType": "InheritanceSpecifier",
+            "src": "218:5:1"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 63,
+              "name": "DetailedERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 116,
+              "src": "225:13:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_DetailedERC20_$116",
+                "typeString": "contract DetailedERC20"
+              }
+            },
+            "id": 64,
+            "nodeType": "InheritanceSpecifier",
+            "src": "225:13:1"
+          }
+        ],
+        "contractDependencies": [
+          116,
+          159,
+          191
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 82,
+        "linearizedBaseContracts": [
+          82,
+          116,
+          159,
+          191
+        ],
+        "name": "SimpleToken",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 80,
+              "nodeType": "Block",
+              "src": "377:2:1",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 81,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 73,
+                    "name": "_name",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 66,
+                    "src": "323:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 74,
+                    "name": "_symbol",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 68,
+                    "src": "330:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 75,
+                    "name": "_decimals",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 70,
+                    "src": "339:9:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  }
+                ],
+                "id": 76,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 72,
+                  "name": "DetailedERC20",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 116,
+                  "src": "309:13:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_DetailedERC20_$116_$",
+                    "typeString": "type(contract DetailedERC20)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "309:40:1"
+              },
+              {
+                "arguments": [],
+                "id": 78,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 77,
+                  "name": "ERC20",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 159,
+                  "src": "356:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_ERC20_$159_$",
+                    "typeString": "type(contract ERC20)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "356:7:1"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 71,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 66,
+                  "name": "_name",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "256:12:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 65,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "256:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 68,
+                  "name": "_symbol",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "270:14:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 67,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "270:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 70,
+                  "name": "_decimals",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "286:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 69,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "286:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "255:47:1"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 79,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "377:0:1"
+            },
+            "scope": 82,
+            "src": "244:135:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 83,
+        "src": "194:187:1"
+      }
+    ],
+    "src": "0:382:1"
+  },
+  "legacyAST": {
+    "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/contracts/SimpleToken.sol",
+    "exportedSymbols": {
+      "SimpleToken": [
+        82
+      ]
+    },
+    "id": 83,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 58,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".7"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:1"
+      },
+      {
+        "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "file": "../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol",
+        "id": 59,
+        "nodeType": "ImportDirective",
+        "scope": 83,
+        "sourceUnit": 160,
+        "src": "25:79:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/home/valtoraub/manong/projects/Blockchain/Ethereum/simpleico/node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol",
+        "file": "../node_modules/openzeppelin-solidity/contracts/token/ERC20/DetailedERC20.sol",
+        "id": 60,
+        "nodeType": "ImportDirective",
+        "scope": 83,
+        "sourceUnit": 117,
+        "src": "105:87:1",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 61,
+              "name": "ERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 159,
+              "src": "218:5:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_ERC20_$159",
+                "typeString": "contract ERC20"
+              }
+            },
+            "id": 62,
+            "nodeType": "InheritanceSpecifier",
+            "src": "218:5:1"
+          },
+          {
+            "arguments": null,
+            "baseName": {
+              "contractScope": null,
+              "id": 63,
+              "name": "DetailedERC20",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 116,
+              "src": "225:13:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_DetailedERC20_$116",
+                "typeString": "contract DetailedERC20"
+              }
+            },
+            "id": 64,
+            "nodeType": "InheritanceSpecifier",
+            "src": "225:13:1"
+          }
+        ],
+        "contractDependencies": [
+          116,
+          159,
+          191
+        ],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 82,
+        "linearizedBaseContracts": [
+          82,
+          116,
+          159,
+          191
+        ],
+        "name": "SimpleToken",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 80,
+              "nodeType": "Block",
+              "src": "377:2:1",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 81,
+            "implemented": true,
+            "isConstructor": true,
+            "isDeclaredConst": false,
+            "modifiers": [
+              {
+                "arguments": [
+                  {
+                    "argumentTypes": null,
+                    "id": 73,
+                    "name": "_name",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 66,
+                    "src": "323:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 74,
+                    "name": "_symbol",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 68,
+                    "src": "330:7:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  {
+                    "argumentTypes": null,
+                    "id": 75,
+                    "name": "_decimals",
+                    "nodeType": "Identifier",
+                    "overloadedDeclarations": [],
+                    "referencedDeclaration": 70,
+                    "src": "339:9:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  }
+                ],
+                "id": 76,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 72,
+                  "name": "DetailedERC20",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 116,
+                  "src": "309:13:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_DetailedERC20_$116_$",
+                    "typeString": "type(contract DetailedERC20)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "309:40:1"
+              },
+              {
+                "arguments": [],
+                "id": 78,
+                "modifierName": {
+                  "argumentTypes": null,
+                  "id": 77,
+                  "name": "ERC20",
+                  "nodeType": "Identifier",
+                  "overloadedDeclarations": [],
+                  "referencedDeclaration": 159,
+                  "src": "356:5:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_type$_t_contract$_ERC20_$159_$",
+                    "typeString": "type(contract ERC20)"
+                  }
+                },
+                "nodeType": "ModifierInvocation",
+                "src": "356:7:1"
+              }
+            ],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 71,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 66,
+                  "name": "_name",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "256:12:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 65,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "256:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 68,
+                  "name": "_symbol",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "270:14:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 67,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "270:6:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 70,
+                  "name": "_decimals",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 81,
+                  "src": "286:15:1",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 69,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "286:5:1",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "255:47:1"
+            },
+            "payable": false,
+            "returnParameters": {
+              "id": 79,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "377:0:1"
+            },
+            "scope": 82,
+            "src": "244:135:1",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 83,
+        "src": "194:187:1"
+      }
+    ],
+    "src": "0:382:1"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-10-09T19:54:20.371Z"
+}
