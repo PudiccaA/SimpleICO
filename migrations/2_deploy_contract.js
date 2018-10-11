@@ -1,4 +1,4 @@
-var SimpleToken = artifacts.require("../contracts/SimpleToken.sol");
+var SimpleToken = artifacts.require("./SimpleToken.sol");
 
 module.exports = function(deployer) {
   const _name = "MyTestToken";
