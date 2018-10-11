@@ -1,10 +1,10 @@
 const BigNumber = web3.BigNumber;
 
-const SimpleToken = artifacts.require("SimpleToken");
-
 require("chai")
   .use(require("chai-bignumber")(BigNumber))
   .should();
+
+const SimpleToken = artifacts.require("SimpleToken");
 
 contract("SimpleToken", accounts => {
   const _name = "MyTestToken";
