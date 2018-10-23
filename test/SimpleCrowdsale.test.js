@@ -1,214 +1,170 @@
 const { ether } = require("./helpers/ether");
+const time = require("./helpers/time");
+const { advanceBlock } = require("./helpers/advanceToBlock");
 
 const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
 const BN = require("bn.js");
 const bnChai = require("bn-chai");
 const expect = chai.expect;
 chai.use(bnChai(BN));
+chai.use(chaiAsPromised);
+chai.should();
 
 const { ZERO_ADDRESS } = require("./helpers/constants");
 const abiDecoder = require("abi-decoder");
 
-const SimpleToken = artifacts.require("SimpleToken");
+const SPToken = artifacts.require("SPToken");
+const SPGToken = artifacts.require("SPGToken");
 const SimpleCrowdsale = artifacts.require("SimpleCrowdsale");
 
-contract(
-  "SimpleCrowdsale",
-  ([_, deployer, owner, wallet, investor01, investor02]) => {
-    beforeEach(async () => {
-      // Token config
-      this.name = "SimpleToken";
-      this.symbol = "MTT";
-      this.decimals = 18;
+contract("SimpleCrowdsale", accounts => {
+  let deployer, wallet, investor01, investor02;
 
-      // Token deployment
-      this.token = await SimpleToken.new(
-        this.name,
-        this.symbol,
-        this.decimals,
-        {
-          from: deployer
-        }
-      );
-      this.totalSupply = await this.token.totalSupply();
-      this.creatorBalance = await this.token.balanceOf(deployer);
-      const receipt = await web3.eth.getTransactionReceipt(
-        this.token.transactionHash
-      );
-      abiDecoder.addABI(this.token.abi);
-      this.logs = abiDecoder.decodeLogs(receipt.logs);
+  [deployer, wallet, investor01, investor02] = accounts;
 
-      // Crowdsale config
-      this.rate = 500;
-      this.wallet = wallet;
+  let _rate, _wallet, _cap, _openingTime, _closingTime;
+  let afterClosingTime, investAmount, expectedTokenAmount;
 
-      // Crowdsale deployment
-      this.crowdsale = await SimpleCrowdsale.new(
-        this.rate,
-        this.wallet,
-        this.token.address,
-        { from: owner }
-      );
+  before(async () => {
+    await advanceBlock();
+  });
 
-      // Transfer all tokens to the crowdsale contract
-      const deployerbalance = await this.token.balanceOf(deployer);
-      const crowdsalebalance = await web3.eth.getBalance(
-        this.crowdsale.address
-      );
-      const tokenaddressbalance = await this.token.balanceOf(
-        this.token.address
-      );
-      const ownerbalance = await this.token.balanceOf(owner);
-      const crowdsalewallet = await this.crowdsale.wallet();
-      const crowdsalewalletBalance = await web3.eth.getBalance(crowdsalewallet);
-      const crowdsalewalletBalanceToken = await this.token.balanceOf(
-        crowdsalewallet
-      );
+  beforeEach(async () => {
+    // Create and deploy contracts
+    spt = await SPToken.new();
+    sptg = await SPGToken.new();
 
-      console.log("address - deployer: %o", deployer);
-      console.log("address - owner: %o", owner);
-      console.log("address - token contract: %o", this.token.address);
-      console.log("address - crowdsale contract: %o", this.crowdsale.address);
-      console.log("address - crowdsale wallet: %o", crowdsalewallet);
+    // Crowdsale config
+    _rate = 500;
+    _wallet = wallet;
+    _cap = ether("70");
+    contributionMin = ether("0.002");
+    contributionMax = ether("50");
+    _tokenVault = deployer;
+    _openingTime = (await time.latest()) + time.duration.weeks(1);
+    _closingTime = _openingTime + time.duration.weeks(1);
 
-      console.log(
-        "balance before transfer - token address: %o",
-        web3.utils.fromWei(tokenaddressbalance.toString(), "ether")
-      );
-      console.log(
-        "balance before transfer - deployer: %o",
-        web3.utils.fromWei(deployerbalance.toString(), "ether")
-      );
-      console.log(
-        "balance before transfer - owner: %o",
-        web3.utils.fromWei(ownerbalance.toString(), "ether")
-      );
-      console.log(
-        "balance before transfer - crowdsale address: %o",
-        crowdsalebalance
-      );
-      console.log(
-        "balance before transfer - crowdsale wallet ETH: %o",
-        web3.utils.fromWei(crowdsalewalletBalance.toString(), "ether")
-      );
-      console.log(
-        "balance before transfer - crowdsale wallet token: %o",
-        web3.utils.fromWei(crowdsalewalletBalanceToken.toString(), "ether")
-      );
+    // Crowdsale deployment
+    sender = await SimpleCrowdsale.new(
+      _rate,
+      _wallet,
+      spt.address,
+      _cap,
+      _tokenVault,
+      _openingTime,
+      _closingTime
+    );
 
-      await this.token.approve(owner, "188400000000000000000", {
-        from: deployer
-      });
+    // Set token purchase parameters for tests
+    investAmount = ether("1");
+    expectedTokenAmount = (await sender.rate()) * investAmount;
+    afterClosingTime = _closingTime + time.duration.seconds(1);
 
-      await this.token.transferFrom(
-        deployer,
-        this.crowdsale.address,
-        1800000000000000000,
-        { from: owner }
-      );
+    // approve crowdsale contract to spend token spt
+    await spt.approve(sender.address, await spt.totalSupply(), {
+      from: deployer
+    });
+  });
 
-      const allowedAccount = await this.token.allowance(deployer, owner);
-      console.log(
-        "allowed accounts: %o",
-        web3.utils.fromWei(allowedAccount.toString(), "ether")
-      );
+  describe("simple crowdsale attributes", () => {
+    it("crowdsale has the correct rate", async () => {
+      const rate = await sender.rate();
+      expect(rate).to.eq.BN(_rate);
+    });
 
-      var deployerbalanceafter = await this.token.balanceOf(deployer);
-      var crowdsalebalanceafterETH = await web3.eth.getBalance(
-        this.crowdsale.address
-      );
-      var crowdsalebalanceafterToken = await this.token.balanceOf(
-        this.crowdsale.address
-      );
-      var tokenaddressbalanceafter = await this.token.balanceOf(
-        this.token.address
-      );
-      var ownerbalanceafter = await this.token.balanceOf(owner);
-      var crowdsalewalletBalanceAfter = await web3.eth.getBalance(
-        crowdsalewallet
-      );
+    it("crowdsale has the correct wallet", async () => {
+      const wallet = await sender.wallet();
+      expect(wallet).to.eql(_wallet);
+    });
 
-      tokenaddressbalanceafter = console.log(
-        "balance after transfer - token address: %o",
-        web3.utils.fromWei(tokenaddressbalanceafter.toString(), "ether")
+    it("crowdsale has the correct token", async () => {
+      const token = await sender.token();
+      expect(token).to.eql(spt.address);
+    });
+
+    it("crowdsale has the correct token vault", async () => {
+      const tokenVault = await sender.tokenWallet();
+      expect(tokenVault).to.eql(deployer);
+    });
+
+    it("crowdsale has the correct opening/closoing time", async () => {
+      const openingTime = await sender.openingTime();
+      const closingTime = await sender.closingTime();
+      expect(openingTime).to.eq.BN(_openingTime);
+      expect(closingTime).to.eq.BN(_closingTime);
+    });
+  });
+
+  describe("accepting payments", () => {
+    /*
+    it("should accept payments", async () => {
+      await sender.sendTransaction({ value: investAmount, from: investor01 })
+        .should.be.fulfilled;
+    });*/
+
+    it("should not accept token purchase before start time", async () => {
+      await sender.buyTokens(investor01, {
+        value: investAmount,
+        from: investor01
+      }).should.be.rejected;
+    });
+
+    it("should accept purchase during the sale and deliver the tokens", async () => {
+      await time.increaseTo(_openingTime);
+
+      const contractWallet = await sender.wallet();
+      const contractWalletEthBefore = await web3.eth.getBalance(contractWallet);
+      //const investorWalletSptBefore = await spt.balanceOf(investor01);
+      //console.log(await web3.utils.fromWei(investorWalletSptBefore, "ether"));
+
+      await sender.buyTokens(investor01, {
+        value: investAmount,
+        from: investor01
+      }).should.be.fulfilled;
+
+      const contractWalletEthAfter = await web3.eth.getBalance(contractWallet);
+      const investorWalletSptAfter = await spt.balanceOf(investor01);
+      const ethDelivered = contractWalletEthAfter - contractWalletEthBefore;
+      //const sptDelivered = investorWalletSptAfter - investorWalletSptBefore;
+      //console.log(await web3.utils.fromWei(investorWalletSptAfter, "ether"));
+
+      expect(await web3.utils.fromWei(ethDelivered.toString(), "ether")).to.eql(
+        "1"
       );
-      console.log(
-        "balance after transfer - deployer: %o",
-        web3.utils.fromWei(deployerbalanceafter.toString(), "ether")
-      );
-      console.log(
-        "balance after transfer - owner: %o",
-        web3.utils.fromWei(ownerbalanceafter.toString(), "ether")
-      );
-      console.log(
-        "balance after transfer - crowdsale address ETH: %o",
-        web3.utils.fromWei(crowdsalebalanceafterETH.toString(), "ether")
-      );
-      console.log(
-        "balance after transfer - crowdsale address Token: %o",
-        web3.utils.fromWei(crowdsalebalanceafterToken.toString(), "ether")
-      );
-      console.log(
-        "balance after transfer - crowdsale wallet ETH: %o",
-        web3.utils.fromWei(crowdsalewalletBalanceAfter.toString(), "ether")
+      expect(
+        await web3.utils.fromWei(investorWalletSptAfter.toString(), "ether")
+      ).to.eq.BN(
+        await web3.utils.fromWei(expectedTokenAmount.toString(), "ether")
       );
     });
 
-    describe("simple crowdsale attributes", () => {
-      it("crowdsale has the correct rate", async () => {
-        const rate = await this.crowdsale.rate();
-        expect(rate).to.eq.BN(this.rate);
-      });
-
-      it("crowdsale has the correct wallet", async () => {
-        const wallet = await this.crowdsale.wallet();
-        expect(wallet).to.eql(this.wallet);
-      });
-
-      it("crowdsale has the correct token", async () => {
-        const token = await this.crowdsale.token();
-        expect(token).to.eql(this.token.address);
-      });
+    it("shoulde reject purchase after end of sale", async () => {
+      await time.increaseTo(afterClosingTime);
+      await sender.buyTokens(investor01, {
+        value: investAmount,
+        from: investor01
+      }).should.be.rejected;
     });
 
-    describe("assigns the initial total supply to the creator", () => {
-      it("assigns the initial total supply to the creator", async () => {
-        expect(this.creatorBalance.eq(this.totalSupply)).to.be.true;
-      });
+    it("should reject purchase over total cap", async () => {
+      await time.increaseTo(_openingTime);
+      await sender.buyTokens(investor01, {
+        value: ether("40"),
+        from: investor01
+      }).should.be.fulfilled;
+      expect(await sender.capReached()).to.be.false;
 
-      it("log has length 1", async () => {
-        expect(this.logs.length).to.eql(1);
-      });
+      await sender.buyTokens(investor02, {
+        value: ether("30"),
+        from: investor02
+      }).should.be.fulfilled;
+      expect(await sender.capReached()).to.be.true;
 
-      it("the transaction type is Transfer", async () => {
-        expect(this.logs[0].name).to.eql("Transfer");
-      });
-
-      it("the transaction is initited from zero_address", async () => {
-        expect(this.logs[0].events[0].value).to.eql(ZERO_ADDRESS);
-      });
-
-      it("tokens are transferred to deployer", async () => {
-        expect(this.logs[0].events[1].value.toLowerCase()).to.eql(
-          deployer.toLowerCase()
-        );
-      });
-
-      it("all supply of tokens is transferred", async () => {
-        expect(this.totalSupply).to.eq.BN(this.logs[0].events[2].value);
-      });
+      await sender.buyTokens(investor02, {
+        value: ether("30"),
+        from: investor02
+      }).should.be.rejected;
     });
-
-    describe("accepting payments", () => {
-      it("should accept payments", async () => {
-        const investAmount = ether("1");
-        //const expectedTokenAmount = this.rate * investAmount;
-        //console.log(expectedTokenAmount);
-        await this.crowdsale.buyTokens(investor01, {
-          value: investAmount,
-          from: investor01
-        });
-      });
-    });
-  }
-);
+  });
+});
