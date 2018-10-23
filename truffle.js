@@ -26,6 +26,13 @@ module.exports = {
     },
 
     ganache: {
+      /*
+      provider: () => {
+        return new HDWalletProvider(
+          "blossom nothing forum coil consider chat shoe rhythm birth tuna auto limb",
+          "http://127.0.0.1:8545/"
+        );
+      },*/
       host: "localhost",
       port: 8545,
       network_id: "*"
