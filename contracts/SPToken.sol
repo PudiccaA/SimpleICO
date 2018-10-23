@@ -8,7 +8,7 @@ contract SPToken is ERC20, Ownable {
   string public name = "SPToken";
   string public symbol = "SPTK";
   uint32 public decimals = 18;
-  uint256 public totalSupply = 10000 * (10 ** uint256(decimals));
+  uint256 public totalSupply = 10000000000 * (10 ** uint256(decimals));
 
   constructor() public {
     _mint(msg.sender, totalSupply);
