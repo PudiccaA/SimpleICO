@@ -5,11 +5,11 @@ import '../node_modules/openzeppelin-solidity/contracts/token/ERC20/SafeERC20.so
 import '../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import '../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol';
 import '../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol';
-import '../node_modules/openzeppelin-solidity/contracts/crowdsale/Crowdsale.sol';
+import '../node_modules/openzeppelin-solidity/contracts/crowdsale/emission/AllowanceCrowdsale.sol';
 import '../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol';
 import '../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol';
 
-contract SimpleCrowdsale is Ownable, Pausable, Crowdsale, CappedCrowdsale, TimedCrowdsale {
+contract SimpleCrowdsale is Ownable, Pausable, AllowanceCrowdsale, CappedCrowdsale, TimedCrowdsale {
   using SafeERC20 for ERC20;
   using SafeMath for uint256;
 
@@ -29,9 +29,11 @@ contract SimpleCrowdsale is Ownable, Pausable, Crowdsale, CappedCrowdsale, Timed
     address _wallet,
     ERC20 _token,
     uint256 _cap,
+    address _tokenVault,
     uint256 _openingTime,
     uint256 _closingTime
   ) Crowdsale(_rate, _wallet, _token)
+    AllowanceCrowdsale(_tokenVault)
     CappedCrowdsale(_cap)
     TimedCrowdsale(_openingTime, _closingTime)
     public {
@@ -39,7 +41,7 @@ contract SimpleCrowdsale is Ownable, Pausable, Crowdsale, CappedCrowdsale, Timed
   }
 
   // allow contract to receive funds
-  function() external payable {}
+  //function() external payable {}
 
   function getUserContribution(address _beneficiary) public view returns(uint256) {
     return contributions[_beneficiary];
@@ -61,4 +63,5 @@ contract SimpleCrowdsale is Ownable, Pausable, Crowdsale, CappedCrowdsale, Timed
     require(_newContribution >= contributionMin && _newContribution <= contributionMax);
     contributions[_beneficiary] = _newContribution;
   }
+
 }
