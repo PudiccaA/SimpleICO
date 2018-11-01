@@ -19,9 +19,9 @@ const SPGToken = artifacts.require("SPGToken");
 const SimpleCrowdsale = artifacts.require("SimpleCrowdsale");
 
 contract("SimpleCrowdsale", accounts => {
-  let deployer, wallet, investor01, investor02;
+  let deployer, wallet, investor01, investor02, investor03;
 
-  [deployer, wallet, investor01, investor02] = accounts;
+  [deployer, wallet, investor01, investor02, investor03] = accounts;
 
   let _rate, _wallet, _cap, _openingTime, _closingTime;
   let afterClosingTime, investAmount, expectedTokenAmount;
@@ -103,7 +103,7 @@ contract("SimpleCrowdsale", accounts => {
         .should.be.fulfilled;
     });*/
 
-    it("should not accept token purchase before start time", async () => {
+    it("should reject token purchase before start time", async () => {
       await sender.buyTokens(investor01, {
         value: investAmount,
         from: investor01
@@ -139,10 +139,26 @@ contract("SimpleCrowdsale", accounts => {
       );
     });
 
-    it("shoulde reject purchase after end of sale", async () => {
+    it("should reject purchase after end of sale", async () => {
       await time.increaseTo(afterClosingTime);
       await sender.buyTokens(investor01, {
         value: investAmount,
+        from: investor01
+      }).should.be.rejected;
+    });
+
+    it("should reject single purchase less than minimum contribution", async () => {
+      await time.increaseTo(_openingTime);
+      await sender.buyTokens(investor01, {
+        value: ether("0.001"),
+        from: investor01
+      }).should.be.rejected;
+    });
+
+    it("should reject single purchase more than max contribution", async () => {
+      await time.increaseTo(_openingTime);
+      await sender.buyTokens(investor01, {
+        value: ether("51"),
         from: investor01
       }).should.be.rejected;
     });
@@ -164,6 +180,27 @@ contract("SimpleCrowdsale", accounts => {
       await sender.buyTokens(investor02, {
         value: ether("30"),
         from: investor02
+      }).should.be.rejected;
+    });
+
+    it("should reject cumulative purchase over max contribution", async () => {
+      await time.increaseTo(_openingTime);
+
+      await sender.buyTokens(investor03, {
+        value: ether("40"),
+        from: investor03
+      }).should.be.fulfilled;
+      expect(await sender.capReached()).to.be.false;
+
+      await sender.buyTokens(investor03, {
+        value: ether("10"),
+        from: investor03
+      }).should.be.fulfilled;
+      expect(await sender.capReached()).to.be.false;
+
+      await sender.buyTokens(investor03, {
+        value: ether("1"),
+        from: investor03
       }).should.be.rejected;
     });
   });
